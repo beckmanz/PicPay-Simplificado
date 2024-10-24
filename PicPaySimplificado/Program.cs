@@ -1,5 +1,8 @@
+using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore;
 using PicPaySimplificado.Data;
+using PicPaySimplificado.Services.Transaction;
+using PicPaySimplificado.Services.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserInterface, UserServices>();
+builder.Services.AddScoped<ITransactionInterface, TransactionServices>();
 
 builder.Services.AddDbContext<AppDbContext>(op =>
 {
