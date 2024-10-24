@@ -54,4 +54,30 @@ public class UserServices : IUserInterface
             return response;
         }
     }
+
+    public async Task<ResponseModel<List<UserModel>>> GetAllUsers()
+    {
+        ResponseModel<List<UserModel>> response = new ResponseModel<List<UserModel>>();
+        try
+        {
+            var users = await _context.Users.ToListAsync();
+            if (users == null)
+            {
+                response.Message = "Não foi encontrado usuários na base de dados!";
+                response.Status = true;
+                return response;
+            }
+
+            response.Message = "Usuários coletados com sucesso!";
+            response.Status = true;
+            response.Data = users;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
 }

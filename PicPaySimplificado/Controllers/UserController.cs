@@ -23,5 +23,12 @@ namespace PicPaySimplificado.Controllers
             var user = await _userInterface.Register(register);
             return Ok(user);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> GetAllUsers()
+        {
+            var users = await _userInterface.GetAllUsers();
+            return Ok(users);
+        }
     }
 }
