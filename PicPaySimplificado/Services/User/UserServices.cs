@@ -80,4 +80,42 @@ public class UserServices : IUserInterface
             return response;
         }
     }
+
+    public async Task<ResponseModel<UserModel>> Deposit(DepositDto deposit)
+    {
+        ResponseModel<UserModel> response = new ResponseModel<UserModel>();
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == deposit.Id);
+            if (user == null)
+            {
+                response.Message = "Usuário não encontrado!";
+                response.Status = true;
+                return response;
+            }
+            if (deposit.value <= 0)
+            {
+                response.Message = "Valor do deposito invalido!";
+                response.Status = true;
+                return response;
+            }
+            
+            var depositar = user.Balance + deposit.value;
+            user.Balance = depositar;
+            
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            
+            response.Message = "Depósito realizado com sucesso!";
+            response.Status = true;
+            response.Data = user;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
 }

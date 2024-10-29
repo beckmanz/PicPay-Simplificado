@@ -30,5 +30,12 @@ namespace PicPaySimplificado.Controllers
             var users = await _userInterface.GetAllUsers();
             return Ok(users);
         }
+        
+        [HttpPut]
+        public async Task<ActionResult<ResponseModel<UserModel>>> Deposit(DepositDto deposit)
+        {
+            var user = await _userInterface.Deposit(deposit);
+            return Ok(user);
+        }
     }
 }
