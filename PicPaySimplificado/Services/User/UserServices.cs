@@ -35,7 +35,7 @@ public class UserServices : IUserInterface
                 Document = register.Document,
                 Email = register.Email,
                 Password = register.Password,
-                Balance = register.Balance,
+                Balance = 0,
                 UserType = register.UserType
             };
 
