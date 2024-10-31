@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore;
 using PicPaySimplificado.Data;
 using PicPaySimplificado.Services.Authorizer;
+using PicPaySimplificado.Services.Notify;
 using PicPaySimplificado.Services.Transaction;
 using PicPaySimplificado.Services.User;
 
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserInterface, UserServices>();
 builder.Services.AddScoped<ITransactionInterface, TransactionServices>();
+builder.Services.AddScoped<INotifyInterface, NotifyService>();
 builder.Services.AddHttpClient<IAuthorizerInterface, AuthorizerServices>();
 
 builder.Services.AddDbContext<AppDbContext>(op =>

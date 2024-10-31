@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 using PicPaySimplificado.Data;
 using PicPaySimplificado.Dtos;
 using PicPaySimplificado.Enums;
 using PicPaySimplificado.Models;
 using PicPaySimplificado.Services.Authorizer;
+using PicPaySimplificado.Services.Notify;
 
 namespace PicPaySimplificado.Services.Transaction;
 
@@ -13,11 +15,13 @@ public class TransactionServices : ITransactionInterface
 
     private readonly AppDbContext _context;
     private readonly IAuthorizerInterface _authorizerInterface;
+    private readonly INotifyInterface _notify;
 
-    public TransactionServices(AppDbContext context, IAuthorizerInterface authorizerInterface)
+    public TransactionServices(AppDbContext context, IAuthorizerInterface authorizerInterface, INotifyInterface notify)
     {
         _context = context;
         _authorizerInterface = authorizerInterface;
+        _notify = notify;
     }
 
     public async Task<ResponseModel<TransactionModel>> Pay(PayDto pay)
@@ -87,7 +91,8 @@ public class TransactionServices : ITransactionInterface
                     return response;
                 }
             }
-
+            
+            await _notify.Notify(sender, receiver);
             response.Message = "Transação realizada com sucesso!!";
             response.Status = true;
             response.Data = transfer;
